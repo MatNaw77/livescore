@@ -7,10 +7,14 @@ const makeUpdateScore = (overrides: Partial<UpdateScoreParams> = {}): UpdateScor
     homeScore: 0,
     awayScore: 0,
     ...overrides,
-})
+});
 
 describe('Scoreboard tests', () => {
-    const scoreboard = new Scoreboard();
+    let scoreboard: Scoreboard;
+
+    beforeEach(() => {
+        scoreboard = new Scoreboard();
+    });
 
     describe('startMatch function tests', () => {
         it('should start a new match Poland-Brazil with 0-0 score', () => {
@@ -27,11 +31,8 @@ describe('Scoreboard tests', () => {
         });
 
         it('should fail if match already exists', () => {
+            scoreboard.startMatch('Poland', 'Brazil');
             expect(() => scoreboard.startMatch('Poland', 'Brazil')).toThrow('Match already exists');
-        });
-
-        it('should fail if small letters are used for team names', () => {
-            expect(() => scoreboard.startMatch('poland', 'brazil')).toThrow('Team names must start with uppercase and the rest lowercase');
         });
 
         it('should fail if team names are not provided', () => {
@@ -40,6 +41,10 @@ describe('Scoreboard tests', () => {
     });
 
     describe('updateScore function tests', () => {
+        beforeEach(() => {
+            scoreboard.startMatch('Poland', 'Brazil');
+        });
+
         it('should update score of an existing match', () => {
             const updateScoreParams = makeUpdateScore({
                 homeScore: 2,
@@ -93,12 +98,6 @@ describe('Scoreboard tests', () => {
                 .toThrow('Match not found');
         });
 
-        it('should fail if team names do not match case formatting', () => {
-            scoreboard.startMatch('Spain', 'Italy');
-            expect(() => scoreboard.finishMatch('spain', 'italy'))
-                .toThrow('Team names must start with uppercase and the rest lowercase');
-        });
-
         it('should fail if team names are not provided', () => {
             expect(() => scoreboard.finishMatch('', 'Brazil')).toThrow('Team names must be provided');
         });
@@ -132,7 +131,9 @@ describe('Scoreboard tests', () => {
 
             remainingMatches.forEach(([home, away]) => {
                 expect(matches).toEqual(
-                    expect.arrayContaining([expect.objectContaining({ homeTeam: home, awayTeam: away })])
+                    expect.arrayContaining([
+                        expect.objectContaining({ homeTeam: home, awayTeam: away })
+                    ])
                 );
             });
         });

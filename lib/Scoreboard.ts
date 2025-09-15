@@ -3,14 +3,15 @@ import { Match, UpdateScoreParams } from "../types/match";
 export class Scoreboard {
     private matches: Match[] = [];
 
-    isValidName = (name: string) => /^[A-Z][a-z]+$/.test(name);
+    private validateTeamName(team: string) {
+        if (!team || team.trim() === '') {
+            throw new Error('Team names must be provided');
+        }
+    }
 
     startMatch = (homeTeam: string, awayTeam: string) => {
-        if (!homeTeam || !awayTeam)
-            throw new Error("Team names must be provided");
-
-        if (!this.isValidName(homeTeam) || !this.isValidName(awayTeam))
-            throw new Error("Team names must start with uppercase and the rest lowercase");
+        this.validateTeamName(homeTeam);
+        this.validateTeamName(awayTeam);
 
         if (homeTeam === awayTeam)
             throw new Error("Team already exists");
@@ -47,12 +48,20 @@ export class Scoreboard {
         match.awayScore = awayScore;
     };
 
-    finishMatch = (homeTeam: string, awayTeam: string) => {
+    finishMatch = (homeTeam: string, awayTeam: string): Match => {
+        this.validateTeamName(homeTeam);
+        this.validateTeamName(awayTeam);
+
         const index = this.matches.findIndex(
             m => m.homeTeam === homeTeam && m.awayTeam === awayTeam
         );
 
-        this.matches.splice(index, 1);
+        if (index === -1) {
+            throw new Error('Match not found');
+        }
+
+        const [finishedMatch] = this.matches.splice(index, 1);
+        return finishedMatch;
     };
 
     getSummary = () => this.matches;
