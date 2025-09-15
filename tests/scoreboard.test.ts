@@ -1,7 +1,8 @@
 import { Scoreboard } from '../lib/Scoreboard/Scoreboard';
-import { UpdateScoreParams } from '../lib/Scoreboard/Scoreboard.types';
+import type { UpdateScoreParams } from '../lib/Scoreboard/Scoreboard.types';
 import { InMemoryMatchRepository } from '../lib/Scoreboard/scoreboard.repo';
 import { MockTimeProvider } from '../services/MockTimeProvider';
+import type { IScoreboard } from '../lib/Scoreboard/Scoreboard.types';
 
 const makeUpdateScore = (overrides: Partial<UpdateScoreParams> = {}): UpdateScoreParams => ({
     homeTeam: 'Poland',
@@ -12,7 +13,7 @@ const makeUpdateScore = (overrides: Partial<UpdateScoreParams> = {}): UpdateScor
 });
 
 describe('Scoreboard tests', () => {
-    let scoreboard: Scoreboard;
+    let scoreboard: IScoreboard;
     const timeProvider = new MockTimeProvider();
 
     beforeEach(() => {
