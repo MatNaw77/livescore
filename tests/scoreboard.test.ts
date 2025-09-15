@@ -33,4 +33,12 @@ describe("Scoreboard tests", () => {
         expect(() => scoreboard.startMatch("Poland", "")).toThrow("Team names must be provided");
     });
 
+
+    it("should update score of an existing match", () => {
+        scoreboard.updateScore("Poland", "Brazil", 2, 1);
+
+        const match = scoreboard.getSummary()[0];
+        expect(match.homeScore).toBe(2);
+        expect(match.awayScore).toBe(1);
+    });
 });
