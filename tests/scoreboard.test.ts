@@ -26,7 +26,7 @@ describe("Scoreboard tests", () => {
     });
 
     it("should fail if small letters are used for team names", () => {
-        expect(() => scoreboard.startMatch("poland", "brazil")).toThrow("Team names must be in uppercase");
+        expect(() => scoreboard.startMatch("poland", "brazil")).toThrow("Team names must start with uppercase and the rest lowercase");
     });
 
     it("should fail if team names are not provided", () => {

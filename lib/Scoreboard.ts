@@ -9,7 +9,24 @@ export type Match = {
 export class Scoreboard {
     private matches: Match[] = [];
 
+    isValidName = (name: string) => /^[A-Z][a-z]+$/.test(name);
+
     startMatch = (homeTeam: string, awayTeam: string) => {
+        if (!homeTeam || !awayTeam)
+            throw new Error("Team names must be provided");
+
+        if (!this.isValidName(homeTeam) || !this.isValidName(awayTeam))
+            throw new Error("Team names must start with uppercase and the rest lowercase");
+
+        if (homeTeam === awayTeam)
+            throw new Error("Team already exists");
+
+        const exists = this.matches.some(
+            m => m.homeTeam === homeTeam && m.awayTeam === awayTeam
+        );
+        if (exists)
+            throw new Error("Match already exists");
+
         this.matches.push({
             homeTeam,
             awayTeam,
