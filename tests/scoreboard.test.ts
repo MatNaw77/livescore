@@ -1,5 +1,7 @@
-import { Scoreboard } from '../lib/Scoreboard';
+import { Scoreboard } from '../lib/Scoreboard/Scoreboard';
 import { UpdateScoreParams } from '../types/match';
+import { InMemoryMatchRepository } from '../lib/Scoreboard/scoreboard.repo';
+import { MockTimeProvider } from '../services/MockTimeProvider';
 
 const makeUpdateScore = (overrides: Partial<UpdateScoreParams> = {}): UpdateScoreParams => ({
     homeTeam: 'Poland',
@@ -11,9 +13,11 @@ const makeUpdateScore = (overrides: Partial<UpdateScoreParams> = {}): UpdateScor
 
 describe('Scoreboard tests', () => {
     let scoreboard: Scoreboard;
+    const timeProvider = new MockTimeProvider();
 
     beforeEach(() => {
-        scoreboard = new Scoreboard();
+        const repo = new InMemoryMatchRepository();
+        scoreboard = new Scoreboard(repo, timeProvider);
     });
 
     describe('startMatch function tests', () => {
@@ -27,7 +31,7 @@ describe('Scoreboard tests', () => {
         });
 
         it('should fail to start a new match using the same team', () => {
-            expect(() => scoreboard.startMatch('Poland', 'Poland')).toThrow('Team already exists');
+            expect(() => scoreboard.startMatch('Poland', 'Poland')).toThrow('Team names must be different');
         });
 
         it('should fail if match already exists', () => {
@@ -168,7 +172,7 @@ describe('Scoreboard tests', () => {
                 awayScore: 0,
             }));
 
-            await new Promise(res => setTimeout(res, 100));
+            timeProvider.advance(100);
 
             scoreboard.startMatch('Germany', 'France');
             scoreboard.updateScore({
