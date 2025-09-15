@@ -64,5 +64,16 @@ export class Scoreboard {
         return finishedMatch;
     };
 
-    getSummary = () => this.matches;
+    getSummary = () => {
+        return [...this.matches].sort((a, b) => {
+            const totalA = a.homeScore + a.awayScore;
+            const totalB = b.homeScore + b.awayScore;
+
+            if (totalA !== totalB) {
+                return totalB - totalA;
+            }
+
+            return b.startTime - a.startTime;
+        });
+    };
 }

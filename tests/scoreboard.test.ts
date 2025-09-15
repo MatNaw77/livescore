@@ -161,12 +161,14 @@ describe('Scoreboard tests', () => {
             expect(summary[1].homeTeam).toBe('Poland');
         });
 
-        it('should order matches with same score by most recent startTime', () => {
+        it('should order matches with same score by most recent startTime', async () => {
             scoreboard.startMatch('Poland', 'Brazil');
             scoreboard.updateScore(makeUpdateScore({
                 homeScore: 1,
                 awayScore: 0,
             }));
+
+            await new Promise(res => setTimeout(res, 100));
 
             scoreboard.startMatch('Germany', 'France');
             scoreboard.updateScore({
