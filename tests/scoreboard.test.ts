@@ -16,4 +16,21 @@ describe("Scoreboard tests", () => {
             awayScore: 0,
         });
     });
+
+    it("should fail to start a new match using the same team", () => {
+        expect(() => scoreboard.startMatch("Poland", "Poland")).toThrow("Team already exists");
+    });
+
+    it("should fail if match already exists", () => {
+        expect(() => scoreboard.startMatch("Poland", "Brazil")).toThrow("Match already exists");
+    });
+
+    it("should fail if small letters are used for team names", () => {
+        expect(() => scoreboard.startMatch("poland", "brazil")).toThrow("Team names must be in uppercase");
+    });
+
+    it("should fail if team names are not provided", () => {
+        expect(() => scoreboard.startMatch("Poland", "")).toThrow("Team names must be provided");
+    });
+
 });
