@@ -47,5 +47,13 @@ export class Scoreboard {
         match.awayScore = awayScore;
     };
 
+    finishMatch = (homeTeam: string, awayTeam: string) => {
+        const index = this.matches.findIndex(
+            m => m.homeTeam === homeTeam && m.awayTeam === awayTeam
+        );
+
+        this.matches.splice(index, 1);
+    };
+
     getSummary = () => this.matches;
 }
