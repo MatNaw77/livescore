@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { StartMatchForm } from '../../components/StartMatchForm/StartMatchForm';
+import { StartMatchForm } from '../../components/StartMatchFrom/StartMatchForm';
 
 describe('StartMatchForm', () => {
     it('renders two input fields and a button', () => {

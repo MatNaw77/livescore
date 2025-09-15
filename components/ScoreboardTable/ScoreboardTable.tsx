@@ -1,12 +1,12 @@
-import { IScoreboard } from "@/lib/Scoreboard/Scoreboard.types";
+'use client';
+import { useState, useEffect } from 'react';
+import { Match } from "@/lib/Scoreboard/Scoreboard.types";
 
 type ScoreboardTableProps = {
-    scoreboard: IScoreboard;
+    matches: Match[];
 };
 
-export const ScoreboardTable = ({ scoreboard }: ScoreboardTableProps) => {
-    const matches = scoreboard.getSummary();
-
+export const ScoreboardTable = ({ matches }: ScoreboardTableProps) => {
     if (matches.length === 0) {
         return (
             <div className="flex justify-center items-center h-screen">
