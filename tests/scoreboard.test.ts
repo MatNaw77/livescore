@@ -138,4 +138,47 @@ describe('Scoreboard tests', () => {
             });
         });
     });
+
+    describe('getSummary function tests', () => {
+        it('should return an empty array if no matches exist', () => {
+            expect(scoreboard.getSummary()).toEqual([]);
+        });
+
+        it('should return matches sorted by total score descending', () => {
+            scoreboard.startMatch('Poland', 'Brazil');
+            scoreboard.updateScore(makeUpdateScore({ homeScore: 1, awayScore: 1 }));
+
+            scoreboard.startMatch('Spain', 'Italy');
+            scoreboard.updateScore({
+                homeTeam: 'Spain',
+                awayTeam: 'Italy',
+                homeScore: 2,
+                awayScore: 2,
+            });
+
+            const summary = scoreboard.getSummary();
+            expect(summary[0].homeTeam).toBe('Spain');
+            expect(summary[1].homeTeam).toBe('Poland');
+        });
+
+        it('should order matches with same score by most recent startTime', () => {
+            scoreboard.startMatch('Poland', 'Brazil');
+            scoreboard.updateScore(makeUpdateScore({
+                homeScore: 1,
+                awayScore: 0,
+            }));
+
+            scoreboard.startMatch('Germany', 'France');
+            scoreboard.updateScore({
+                homeTeam: 'Germany',
+                awayTeam: 'France',
+                homeScore: 1,
+                awayScore: 0,
+            });
+
+            const summary = scoreboard.getSummary();
+            expect(summary[0].homeTeam).toBe('Germany');
+            expect(summary[1].homeTeam).toBe('Poland');
+        });
+    });
 });
