@@ -2,6 +2,7 @@ import { Scoreboard } from '../lib/Scoreboard';
 
 describe("Scoreboard tests", () => {
     const scoreboard = new Scoreboard();
+    const BASE_MATCH = { homeTeam: 'Poland', awayTeam: 'Brazil', homeScore: 0, awayScore: 0 };
 
     describe("startMatch function tests", () => {
         it("should start a new match Poland-Brazil with 0-0 score", () => {
@@ -11,10 +12,7 @@ describe("Scoreboard tests", () => {
             const match = matches[0];
             expect(matches.length).toBe(1);
             expect(match).toMatchObject({
-                homeTeam: "Poland",
-                awayTeam: "Brazil",
-                homeScore: 0,
-                awayScore: 0,
+                ...BASE_MATCH,
             });
         });
 
@@ -38,8 +36,7 @@ describe("Scoreboard tests", () => {
     describe("updateScore function tests", () => {
         it("should update score of an existing match", () => {
             scoreboard.updateScore({
-                homeTeam: "Poland",
-                awayTeam: "Brazil",
+                ...BASE_MATCH,
                 homeScore: 2,
                 awayScore: 1
             });
@@ -47,6 +44,35 @@ describe("Scoreboard tests", () => {
             const match = scoreboard.getSummary()[0];
             expect(match.homeScore).toBe(2);
             expect(match.awayScore).toBe(1);
+        });
+
+        it("should fail if match does not exist", () => {
+            expect(() =>
+                scoreboard.updateScore({
+                    homeTeam: "Spain",
+                    awayTeam: "Italy",
+                    homeScore: 1,
+                    awayScore: 1
+                })
+            ).toThrow("Match not found");
+        });
+
+        it("should fail if score is negative", () => {
+            expect(() =>
+                scoreboard.updateScore({
+                    ...BASE_MATCH,
+                    homeScore: -1,
+                })
+            ).toThrow("Score cannot be negative");
+        });
+
+        it("should fail if score is not a number", () => {
+            expect(() =>
+                scoreboard.updateScore({
+                    ...BASE_MATCH,
+                    homeScore: NaN,
+                })
+            ).toThrow("Score must be a valid number");
         });
     });
 });
