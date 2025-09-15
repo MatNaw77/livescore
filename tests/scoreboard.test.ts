@@ -77,4 +77,15 @@ describe('Scoreboard tests', () => {
             expect(() => scoreboard.updateScore(updateScoreParams)).toThrow('Score must be a valid number');
         });
     });
+
+    describe('finishMatch function tests', () => {
+        it('should finish an existing match', () => {
+            scoreboard.startMatch('Spain', 'Italy');
+            scoreboard.finishMatch('Spain', 'Italy');
+
+            const matches = scoreboard.getSummary();
+            const currentMatch = matches.find(m => m.homeTeam === 'Spain' && m.awayTeam === 'Italy')
+            expect(currentMatch).toBeUndefined();
+        });
+    });
 });
