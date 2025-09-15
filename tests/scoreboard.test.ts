@@ -35,7 +35,12 @@ describe("Scoreboard tests", () => {
 
 
     it("should update score of an existing match", () => {
-        scoreboard.updateScore("Poland", "Brazil", 2, 1);
+        scoreboard.updateScore({
+            homeTeam: "Poland",
+            awayTeam: "Brazil",
+            homeScore: 2,
+            awayScore: 1
+        });
 
         const match = scoreboard.getSummary()[0];
         expect(match.homeScore).toBe(2);

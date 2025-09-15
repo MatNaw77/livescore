@@ -1,10 +1,4 @@
-export type Match = {
-    homeTeam: string;
-    awayTeam: string;
-    homeScore: number;
-    awayScore: number;
-    startTime: number;
-};
+import { Match, UpdateScoreParams } from "../types/match";
 
 export class Scoreboard {
     private matches: Match[] = [];
@@ -34,6 +28,16 @@ export class Scoreboard {
             awayScore: 0,
             startTime: Date.now(),
         });
+    };
+
+    updateScore = ({ homeTeam, awayTeam, homeScore, awayScore }: UpdateScoreParams) => {
+        const match = this.matches.find(m => m.homeTeam === homeTeam && m.awayTeam === awayTeam);
+        if (!match) {
+            throw new Error("Match not found");
+        }
+
+        match.homeScore = homeScore;
+        match.awayScore = awayScore;
     };
 
     getSummary = () => this.matches;
