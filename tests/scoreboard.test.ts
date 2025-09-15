@@ -1,5 +1,5 @@
 import { Scoreboard } from '../lib/Scoreboard/Scoreboard';
-import { UpdateScoreParams } from '../types/match';
+import { UpdateScoreParams } from '../lib/Scoreboard/Scoreboard.types';
 import { InMemoryMatchRepository } from '../lib/Scoreboard/scoreboard.repo';
 import { MockTimeProvider } from '../services/MockTimeProvider';
 

@@ -1,4 +1,4 @@
-import { Match } from '../../types/match';
+import { Match } from './Scoreboard.types';
 
 export interface MatchRepository {
     add(match: Match): void;

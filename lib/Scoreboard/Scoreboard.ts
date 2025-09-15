@@ -1,7 +1,7 @@
-import { Match, UpdateScoreParams } from '../../types/match';
+import { Match, UpdateScoreParams } from './Scoreboard.types';
 import { MatchRepository } from '@/lib/Scoreboard/scoreboard.repo';
 import { TimeProvider } from '@/lib/Scoreboard/TimeProvider';
-import { IScoreboard } from '@/lib/Scoreboard/Scoreboard.interface';
+import { IScoreboard } from '@/lib/Scoreboard/Scoreboard.types';
 
 export class Scoreboard implements IScoreboard {
     constructor(
