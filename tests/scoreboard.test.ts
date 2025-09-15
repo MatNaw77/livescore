@@ -1,4 +1,4 @@
-import { Scoreboard } from '@/lib/Scoreboard';
+import { Scoreboard } from '../lib/Scoreboard';
 
 describe("Scoreboard tests", () => {
     const scoreboard = new Scoreboard();
