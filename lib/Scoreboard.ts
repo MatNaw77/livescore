@@ -31,10 +31,17 @@ export class Scoreboard {
     };
 
     updateScore = ({ homeTeam, awayTeam, homeScore, awayScore }: UpdateScoreParams) => {
-        const match = this.matches.find(m => m.homeTeam === homeTeam && m.awayTeam === awayTeam);
-        if (!match) {
+        const match = this.matches.find((m: Match) => m.homeTeam === homeTeam && m.awayTeam === awayTeam);
+
+        if (!match)
             throw new Error("Match not found");
-        }
+
+        if (homeScore < 0 || awayScore < 0)
+            throw new Error("Score cannot be negative");
+
+        if (isNaN(homeScore) || isNaN(awayScore))
+            throw new Error("Score must be a valid number");
+
 
         match.homeScore = homeScore;
         match.awayScore = awayScore;
