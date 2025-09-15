@@ -87,5 +87,54 @@ describe('Scoreboard tests', () => {
             const currentMatch = matches.find(m => m.homeTeam === 'Spain' && m.awayTeam === 'Italy')
             expect(currentMatch).toBeUndefined();
         });
+
+        it('should fail if match does not exist', () => {
+            expect(() => scoreboard.finishMatch('Germany', 'France'))
+                .toThrow('Match not found');
+        });
+
+        it('should fail if team names do not match case formatting', () => {
+            scoreboard.startMatch('Spain', 'Italy');
+            expect(() => scoreboard.finishMatch('spain', 'italy'))
+                .toThrow('Team names must start with uppercase and the rest lowercase');
+        });
+
+        it('should fail if team names are not provided', () => {
+            expect(() => scoreboard.finishMatch('', 'Brazil')).toThrow('Team names must be provided');
+        });
+
+        it('should fail if match is already finished', () => {
+            scoreboard.startMatch('Mexico', 'USA');
+            scoreboard.finishMatch('Mexico', 'USA');
+
+            expect(() => scoreboard.finishMatch('Mexico', 'USA')).toThrow('Match not found');
+        });
+
+        it('should remove only the specified match when multiple matches exist', () => {
+            const matchesToStart = [
+                ['Poland', 'Brazil'],
+                ['Spain', 'Italy'],
+                ['Germany', 'France'],
+                ['Argentina', 'Chile'],
+            ] as const;
+
+            matchesToStart.forEach(([home, away]) => scoreboard.startMatch(home, away));
+            scoreboard.finishMatch('Germany', 'France');
+
+            const matches = scoreboard.getSummary();
+
+            expect(matches.length).toBe(3);
+            expect(matches.find(m => m.homeTeam === 'Germany' && m.awayTeam === 'France')).toBeUndefined();
+
+            const remainingMatches = matchesToStart.filter(
+                ([home, away]) => !(home === 'Germany' && away === 'France')
+            );
+
+            remainingMatches.forEach(([home, away]) => {
+                expect(matches).toEqual(
+                    expect.arrayContaining([expect.objectContaining({ homeTeam: home, awayTeam: away })])
+                );
+            });
+        });
     });
 });
